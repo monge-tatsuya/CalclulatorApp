@@ -43,6 +43,7 @@ public class CalculatorFrame extends JFrame {
                 "C", "", "", ""
         };
 
+        //ボタン各種設定
         for (String text : buttons) {
 
             if (text.isEmpty()) {
@@ -99,12 +100,14 @@ public class CalculatorFrame extends JFrame {
         displayLabel.setText(text);
     }
 
+    // Controllerをバインドする処理
     public void bindController(CalculatorController c) {
-        // Controllerをバインドする処理
+
         this.c = c;
     }
 
+    //表示欄のテキストを取得する
     public String getDisplay(){
-        return displayLabel.getText(); //表示欄のテキストを取得する
+        return displayLabel.getText();
     }
 }
