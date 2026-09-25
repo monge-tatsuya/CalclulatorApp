@@ -142,8 +142,8 @@ public class CalculatorModel {
             return;
         }
 
-        //負号のみ、「-0」、「-0.」が入力されている状況で演算子を受け付けない。
-        if (currentInput.toString().equals("-") || currentInput.toString().equals("-0") || currentInput.toString().equals("-0.") || currentInput.toString().equals("0.")) {
+        //負号のみ、「-0」、「-0.」、「0」が入力されている状況で演算子を受け付けない。
+        if (currentInput.toString().equals("-") || currentInput.toString().equals("-0") || currentInput.toString().equals("-0.") || currentInput.toString().equals("0.") || currentInput.toString().equals("0")) {
             return;
         }
 
