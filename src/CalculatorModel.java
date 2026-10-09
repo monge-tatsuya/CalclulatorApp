@@ -60,6 +60,11 @@ public class CalculatorModel {
             return false;
         }
 
+        //Cボタン押下後のRESET状態で「0」が押下された場合は状態を変化しない。
+        if (state == InputState.RESET && currentInput.toString().equals("0") && ch == '0') {
+            return false;
+        }
+
         //計算結果表示中に数値ボタンを押下すると、計算結果を削除し新しい数値の入力に遷移する。
         if (state == InputState.RESULT) {
             currentInput.setLength(0);
@@ -104,9 +109,12 @@ public class CalculatorModel {
         if (state == InputState.INPUT_OPERATOR) {
             return false;
         }
-
         //計算結果表示中は小数点は押下できない。
         if (state == InputState.RESULT) {
+            return false;
+        }
+        //Cボタン押下後のRESET状態では小数点は押下できない。
+        if (state == InputState.RESET) {
             return false;
         }
         //負号のみが入力されている状況で小数点が押下された場合無視する。
@@ -135,20 +143,25 @@ public class CalculatorModel {
         }
 
         //負の数を入力する。
-        if (op == Operator.SUB && state == InputState.READY) {
+        if (op == Operator.SUB && (state == InputState.READY || state == InputState.RESET)) {
             currentInput.setLength(0);
             currentInput.append("-");
             state = InputState.INPUT_NUMBER;
             return;
         }
 
-        //負号のみ、「-0」、「-0.」、「0」が入力されている状況で演算子を受け付けない。
-        if (currentInput.toString().equals("-") || currentInput.toString().equals("-0") || currentInput.toString().equals("-0.") || currentInput.toString().equals("0.") || currentInput.toString().equals("0")) {
+        //負号のみ、「-0」、「-0.」が表示されている状況で演算子を受け付けない。
+        if (currentInput.toString().equals("-") || currentInput.toString().equals("-0") || currentInput.toString().equals("-0.") || currentInput.toString().equals("0.")){
             return;
         }
 
-        //初期状態時に負号以外の演算子を受け付けない。
+        //初期状態時に負号以外の演算子は押下できない。
         if (state == InputState.READY && op != Operator.SUB) {
+            return;
+        }
+
+        //Cボタン押下後のRESET状態では負号以外の演算子は押下できない。
+        if (state == InputState.RESET && op != Operator.SUB) {
             return;
         }
 
@@ -267,7 +280,7 @@ public class CalculatorModel {
         pendingOp = null; //演算子をリセットする。
 
         //初期状態へ遷移する。
-        state = InputState.READY;
+        state = InputState.RESET;
     }
 
     /**
